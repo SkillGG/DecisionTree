@@ -75,7 +75,7 @@ treeMenu.addBtn.onclick = (e)=>{
 		);
 		P5.typing = false;
 	}).catch((e)=>{
-		infoSpan.innerHTML = `Could not add new Decision. Err: ${e}`;
+		infoSpan.innerHTML = `Could not add new Node. Err: ${e}`;
 		P5.typing = false;
 	});
 }
