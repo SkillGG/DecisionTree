@@ -385,14 +385,14 @@ let processLine = (fe, log)=>{
 					tree.addScope(dS.name);
 					tree.trees.getLastItem().decisions.push({name: dS.name});
 					if(log)
-						console.log(`\tAdded new Decision: ${tree.getScope(tree.scope())}`);
+						console.log(`\tAdded new Node: ${tree.getScope(tree.scope())}`);
 				}
 			}
 		break;
 		case 2:
 			let closeD = FileProcessing.regx.end(line);
 			if(closeD){
-				if(closeD.is('decision', tree.trees.getLastItem().decisions.getLastItem().name)){
+				if(closeD.is('node', tree.trees.getLastItem().decisions.getLastItem().name)){
 					if(log)
 						console.log(`\tClosed ${tree.getScope(tree.scope())}`);
 					tree.endScope();
@@ -435,9 +435,9 @@ let processFile = (fat)=>{
 	faa.forEach((e,i,a)=>{
 		processLine({e,i,a}); // process line
 	});
-	let tempS = tree.toString();
+	//let tempS = tree.toString();
 	tree = {global: tree.global, trees: tree.trees}; // clear tree
-	tree.toString = (()=>{return tempS;});
+	//tree.toString = (()=>{return tempS;});
 	if(showTree(tree)){ // show tree
 		if(inputFile.files[0])	// change state if 'Open'
 			infoSpan.innerHTML = `File ${inputFile.files[0].name} (${inputFile.files[0].size} B) loaded correctly.`;
@@ -473,7 +473,7 @@ let treeToString = function(t){
 			eval(`ed = t.global.${t.trees[0].name}.${e.name}`);
 			if(!ed)
 				return;
-			asString += `\tdecision ${ed.type} ${e.name}:\n\r`;
+			asString += `\tnode ${ed.type} ${e.name}:\n\r`;
 
 			ed.text.split('\n').forEach((e2)=>{
 				if(!e2)
@@ -489,7 +489,7 @@ let treeToString = function(t){
 				asString += `\t\t->${e3.dest}${e3.name?`#${e3.name}`:``}\n\r`;
 			});
 
-			asString += `\tend decision: ${e.name}\n\r`;
+			asString += `\tend node: ${e.name}\n\r`;
 		});
 	}
 
