@@ -1,48 +1,44 @@
+// Add new tree called Main
 tree Main:
-
-	decision click StartGame:
-
+	// Add new decision(rectangle) named StartGame (`click` means that has just 1 outNode)
+	node click StartGame:
+		// outNode to LangSelect Node
 		->LangSelect
+	end node: StartGame
 
-	end decision: StartGame
-
-	decision click LangSelect:
-
+	node click LangSelect:
+		// value of LangSelect Node
 		Choose your language screen
-
 		->Disclaimers
-
-	end decision: LangSelect
-	decision click Disclaimers:
-
+	end node: LangSelect
+	node click Disclaimers:
 		Show all Disclaimers
-
 		->Tutorial1
-
-	end decision: Disclaimers
-	decision dual Tutorial1:
-
+	end node: Disclaimers
+	// `dual` means that has only 2 outNodes
+	node dual Tutorial1:
 		Do you want to play tutorial?
-
+		// First outNode to Tutorial named Yes
 		->Tutorial#Yes
+		// Second outNode to StoryMode named No
 		->StoryMode#No
 
-	end decision: Tutorial1
-	decision click Tutorial:
+	end node: Tutorial1
+	node click Tutorial:
 
 		Tutorial
 
 		->StoryMode
 
-	end decision: Tutorial
-	decision click StoryMode:
+	end node: Tutorial
+	node click StoryMode:
 
 		Story Mode start
 
 		->Story
 
-	end decision: StoryMode
-	decision lots Story:
+	end node: StoryMode
+	node lots Story:
 
 		Game Main Menu
   
@@ -51,5 +47,6 @@ tree Main:
 		->Load#Load
 		->LangSelect#Quit
 
-	end decision: Story
+	end node: Story
+// end tree called Main
 end tree: Main
