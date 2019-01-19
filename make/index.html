@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			overflow: hidden;
+		}
+		fieldset {
+			width: 100%;
+		}
+		input[type=file] {
+			display: none;
+		}
+		div.menuButton {
+			border: 2px solid green;
+			margin: 0;
+			padding: 0px;
+			cursor: pointer;
+			height: 18px;
+			box-shadow: black 1px 1px;
+			background-color: yellow;
+		}
+		div.menuButton:active {
+			box-shadow: none;
+		}
+		#connValues input {
+			border: 0;
+			background-color: inherit;
+		}
+		#connValues td {
+			border: 0;
+			background-color: inherit;
+		}
+		#connValues tr {
+			border: 0;
+			background-color: #fcff80;
+		}
+		#connValues tr:nth-child(2n){
+			background-color: #fcff60;
+		}
+		#connValues #unchangable tr {
+			background-color: #fcfcfc;
+		}
+		#addValues, #cngValues, #newValues, #connValues {
+			width: 40%;
+			height: calc(10% + 100px);
+			height: -moz-calc(10% + 100px);
+			height: -webkit-calc(10% + 100px);
+			top: 40%;
+			top: 40%;
+			top: 40%;
+			left: 30%;
+			background-color: white;
+			position: absolute;
+		}
+		#optionButton {
+			width: 30px;
+		}
+		#treeoptionButton {
+			width: 30px;
+		}
+		#menuHandle {
+			width: auto;
+			display: grid;
+			grid-auto-flow: column dense;
+			grid-auto-columns: min-content;
+			grid-column-gap: 0px;
+		}
+		.menu#treeMenu {
+			top:22px;
+			left: 36px;
+		}
+		.menu#fileMenu {
+			top:22px;
+			left:0px;
+		}
+		.menu {
+			z-index: 99;
+			position: absolute;
+		}
+		.menu .option {
+			border: 2px solid #888888;
+			box-shadow: black 1px 1px;
+			padding-left: 2px;
+			padding-right: 2px;
+			padding-top: 1px;
+			padding-bottom: 0px;
+			background-color: #cccccc;
+			height: 25px;
+			min-width: 60px;
+			font-size: 15px;
+		}
+		.menu .option:hover{
+			background-color: #dddddd;
+			cursor: pointer;
+		}
+		.menu .separator {
+			border: 1px solid #888888;
+			box-shadow: black 1px 1px;
+			padding-left: 0px;
+			padding-right: 0px;
+			padding-top: 0px;
+			padding-bottom: 0px;
+			background-color: #cccccc;
+			height: 4px;
+			font-size: 15px;
+		}
+		.footHeader {
+			position: absolute;
+			bottom: 0px;
+			background-color: #aaaaaa;
+			border: 1px solid #555555;
+			width: 100%;
+			z-index: 99;
+		}
+		.rightAbs {
+			position: absolute;
+			right: 0px;
+		}
+		#dmodediode, #cmodediode {
+			font-size: 20px;
+			float: right;
+			opacity: 0;
+			animation: blinkOP 1s infinite;
+			-webkit-animation: blinkOP 1s infinite;
+		}
+		#dmodediode {
+			color: red;
+		}
+		#cmodediode {
+			color: green;
+		}
+		@keyframes blinkOP {
+			50% {opacity: 1;}
+		}
+
+		@-webkit-keyframes blinkOP {
+			50% {opacity: 1;}
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="modals.css">
+	<script type="text/javascript" src='modals.js'></script>
+	<script type="text/javascript" src='./../../../../Libs/Extends.js'></script>
+	<script type="text/javascript" src='./../../../../Libs/p5/p5.js'></script>
+	<script type="text/javascript" src='./../../../../Libs/p5/addons/p5.dom.js'></script>
+	<script type="text/javascript" src='main-p5.js'></script>
+	<script type="text/javascript" src='decision-p5.js'></script>
+	<script type="text/javascript" src='instant.js'></script>
+	<script type="text/javascript" src='FileProcessing.js'></script>
+	<title>Decision Tree Maker</title>
+	<script type="text/javascript" defer src='defer.js'></script>
+	<script defer src='http://skilletss.cba.pl/kptat/hide.js'></script>
+</head>
+<body>
+	<modal id='addModal'>
+		<center id='addValues'>
+			<label for='n1'>Name</label><br>
+			<input placeholder="name" name='n1' type='text' id='addDecName'>
+			<br>
+			<label for='v1'>Short Value</label>
+			<br>
+			<input name='v1' placeholder="value" type='text' id='addDecValue'>
+			<br><br>
+			<div id='addDecBtn' class='menuButton' style='max-width: min-content;padding:2px;max-width: -moz-min-content; max-width: -webkit-min-content;'>Add</div>
+		</center>
+	</modal>
+	<modal id='changeModal'>
+		<center id='cngValues'>
+			<label for='n1'>Name</label><br>
+			<input placeholder="name" name='n1' type='text' id='cngDecName'>
+			<br>
+			<label for='v1'>Short Value</label>
+			<br>
+			<input name='v1' placeholder="value" type='text' id='cngDecValue'>
+			<br><br>
+			<div id='cngDecBtn' class='menuButton' style='max-width: min-content;padding:2px;max-width: -moz-min-content; max-width: -webkit-min-content;'>Save</div>
+		</center>
+	</modal>
+	<modal id='newModal'>
+		<center id='newValues'>
+			<label for='n1'>TreeName</label><br>
+			<input placeholder="name" name='n1' type='text' id='newTreeName'>
+			<br>
+			<div id='newTreeBtn' class='menuButton' style='max-width: min-content;padding:2px;max-width: -moz-min-content; max-width: -webkit-min-content;'>Add</div>
+		</center>
+	</modal>
+	<modal id='connectionsModal'>
+		<center id='connValues'>
+			<table id='connections'>
+				<tbody id='unchangable' class='conTable'>
+					<tr>
+						<td>
+							Destination
+						</td>
+						<td>
+							Name
+						</td>
+					</tr>
+				</tbody>
+				<tbody id='changable' class='conTable' >
+					
+				</tbody>
+			</table>
+			<div id='cngConnBtn' class='menuButton' style='max-width: min-content;padding:2px;max-width: -moz-min-content; max-width: -webkit-min-content;'>Save</div>
+		</center>
+	</modal>
+	<menu id='menuHandle'>
+		<div id='optionButton' class='menuButton'>File</div>
+		<div class='menuButton' style='display: none;' id='treeoptionButton'>Tree</div>
+		<div class='rightAbs'><p id='dmodediode' style='display: none;'>D</p><p id='cmodediode' style='display: none;'>C</p></div>
+	</menu>
+	<div style='display: none;' id='fileMenu' class='menu'>
+		<div class='option' id='newFile'>New</div>
+		<div class="option" id='loadFile'>Load</div>
+		<span class='bottomContainer' style='display: none;'>
+			<div class='separator'><hr></div>
+			<div class='option' id='saveOption'>Save</div>
+			<div class='option' style='display: none;' id='downloadOption'><a id='down'>Download</a></div>
+		</span>
+	</div>
+	<div style='display: none;' id='treeMenu' class='menu'>
+		<div class='option' id='nodeAddOpt'>Add Node&emsp;(N)</div>
+		<div class='option' id='nodeDelOpt'>Delete Node&emsp;(D)</div>
+		<div class='option' id='connEditOpt'>Connection Edit&emsp;(C)</div>
+	</div>
+	<input type="file" id='files' accept=".dt">
+	<div class='footHeader'><info></info></div>
+	<div id='Tree'>
+	</div>
+</body>
+</html>

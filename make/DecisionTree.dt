@@ -1,0 +1,55 @@
+tree Main:
+
+	decision click StartGame:
+
+		->LangSelect
+
+	end decision: StartGame
+
+	decision click LangSelect:
+
+		Choose your language screen
+
+		->Disclaimers
+
+	end decision: LangSelect
+	decision click Disclaimers:
+
+		Show all Disclaimers
+
+		->Tutorial1
+
+	end decision: Disclaimers
+	decision dual Tutorial1:
+
+		Do you want to play tutorial?
+
+		->Tutorial#Yes
+		->StoryMode#No
+
+	end decision: Tutorial1
+	decision click Tutorial:
+
+		Tutorial
+
+		->StoryMode
+
+	end decision: Tutorial
+	decision click StoryMode:
+
+		Story Mode start
+
+		->Story
+
+	end decision: StoryMode
+	decision lots Story:
+
+		Game Main Menu
+  
+		->Game#Play
+		->Options#Settings
+		->Load#Load
+		->LangSelect#Quit
+
+	end decision: Story
+end tree: Main
