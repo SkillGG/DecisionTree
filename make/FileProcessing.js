@@ -27,7 +27,7 @@ FileProcessing.regx.decision = {};
 /**
 	decision <TYPE> <LABEL>[2]:
 */
-FileProcessing.regx.decision.startRX = /(?:[ \t]*)decision(?:[ ]+[ \t]*)([^ ]+)(?:[ ]+[ \t]*)([^: ]*)(?:[ \t]*):/i;
+FileProcessing.regx.decision.startRX = /(?:[ \t]*)node(?:[ ]+[ \t]*)([^ ]+)(?:[ ]+[ \t]*)([^: ]*)(?:[ \t]*):/i;
 /**
 	-><DESTINATION>[1]#<NAME>[2]
 */
