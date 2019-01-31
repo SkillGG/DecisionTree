@@ -195,7 +195,7 @@ let changeMenu = (setup)=>{
 	if(!setup)
 		return null;
 	return new Promise((rs,rj)=>{
-		Decisions.input.cngName.value = setup.name || "";
+		Decisions.input.cngName.innerHTML = setup.name;
 		Decisions.input.cngValue.value = setup.value || "";
 		let tempWOC = window.onclick;
 		window.onclick = (e)=>{
@@ -207,9 +207,7 @@ let changeMenu = (setup)=>{
 		};
 		Decisions.input.cngBtn.onclick = (e)=>{
 			Modals.items[1].hide();
-			if(!Decisions.input.cngName.value)
-				rj("Name not specified!");
-			rs({name: Decisions.input.cngName.value, value: Decisions.input.cngValue.value});
+			rs({value: Decisions.input.cngValue.value});
 		}
 		Modals.items[1].show();
 		fileMenu.menu.style.display = "none";
@@ -249,7 +247,6 @@ let connChangeMenu = (setup)=>{
 			in1.value = (e.dest || "Dest");
 			in1.type = 'text';
 			let in2 = document.createElement('input');
-			console.log(setup);
 			in2.value = (e.name || (setup.type==='click'?"#X#":""));
 			if(in2.value === '#X#'){
 				in2.value = "click";
@@ -287,6 +284,10 @@ let connChangeMenu = (setup)=>{
 		};
 		Decisions.input.conBtn.onclick = ()=>{
 			Modals.items[3].hide();
+			connections.forEach(e=>{
+				if(e.n === 'click')
+					e.n = "!N";
+			})
 			rs({c: connections});
 		}
 	});
@@ -473,7 +474,7 @@ let treeToString = function(t){
 			eval(`ed = t.global.${t.trees[0].name}.${e.name}`);
 			if(!ed)
 				return;
-			asString += `\tnode ${ed.type} ${e.name}:\n\r`;
+			asString += `\tnode ${ed.type || "click"} ${e.name}:\n\r`;
 
 			ed.text.split('\n').forEach((e2)=>{
 				if(!e2)

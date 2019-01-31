@@ -74,7 +74,6 @@ P5.openConChangeMenu = async (dec)=>{
 	let newV = await connChangeMenu({cons: dec.connections, type: dec.type}).catch(e=>{console.error(e); pceed = false;});
 	if(pceed){
 		if(newV){
-			console.log(newV);
 			dec.connections = [];
 			newV.c.forEach((e)=>{
 				dec.connections.push({name: (((e.n === "!N")?"":e.n) || ""), dest: e.d || ""});
@@ -82,6 +81,7 @@ P5.openConChangeMenu = async (dec)=>{
 		}
 	}
 	P5.typing = false;
+	dec.reTree(tree);
 }
 
 P5.openChangeMenu = async (dec)=>{
@@ -90,8 +90,7 @@ P5.openChangeMenu = async (dec)=>{
 	let newV = await changeMenu({name: dec.name, value: dec.value}).catch(e=>{console.error(e); pceed = false;});
 	if(pceed){
 		if(newV){
-			if(newV.name && newV.value){
-				dec.name = newV.name;
+			if(newV.value){
 				dec.value = newV.value;
 				let ts = P5.font.textBounds(dec.value);
 				dec.w = (ts.w < 20 ? 60 : ts.w + 30);
@@ -100,6 +99,7 @@ P5.openChangeMenu = async (dec)=>{
 		}
 	}
 	P5.typing = false;
+	dec.reTree(tree);
 }
 
 P5.clearDecisions = ()=>{
@@ -119,12 +119,16 @@ function setup(){
 }
 
 P5.addDecision = function(name="", value="", connections=[], w=0, h=0){
+	if(!name)
+		return;
 	let lD = this.decisions.getLastItem();
 	if(!lD)
 		lD = {x: 0, y: 0, w: 60, h: 60};
 	this.decisions.push(
 		new Decision(this.cnv, this.decisions, (lD.x + lD.w + 20), (lD.y + lD.h/2), w?w:70, h?h:50, name, value, connections)
 	);
+	eval(`tree.global.${tree.trees[0].name}.${name} = {}`);
+	this.decisions.getLastItem().reTree(tree);
 }
 
 function draw(){

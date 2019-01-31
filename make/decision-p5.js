@@ -25,6 +25,7 @@ class Decision {
 		this.connectionStart = false;
 		this.drawConnections = [];
 		this.rlov = false;
+		this.type = connections.length <= 1?"click":connections.length === 2?"dual":connections.length > 2?"lots":"click";
 		this.otrlov = false;
 		this.offset = {x:0, y:0};
 		this.dragging = false;
@@ -221,19 +222,39 @@ Decision.prototype.draw = function(mX, mY) {
 	textSize(16);
 };
 
+Decision.prototype.reTree = function(tr){
+	let dc = eval(`tr.global.${tr.trees[0].name}.${this.name}`);
+	if(!dc)
+		return;
+	tr.trees[0].decisions.pushIfNot({name: this.name});
+	dc.GOs = this.connections || [];
+	dc.text = this.value || "";
+	dc.type = this.type || "";
+}
+
+Decision.prototype.kys = function(tr){
+	P5.decisions.unsetItem(P5.decisions.indexOf(this));
+	eval(`tr.global.${tr.trees[0].name}.${this.name} = null`);
+	Array.from(this.dL).forEach((e)=>{
+		e.connections.unsetMatchingItemV({dest: this.name});
+	});
+	let zH = tr.trees[0].decisions.getFirstMatchingObjectV({name:this.name});
+	tr.trees[0].decisions.unsetItem(tr.trees[0].decisions.indexOf(zH));
+};
+
 Decision.prototype.click = function(){
-	if(this.rlov || this.otrlov ){
+	if(this.rlov || this.otrlov){
 		if(!P5.deleteMode && !P5.connectionMode){
 			// CHANGE MODE
 			if(this.rlov)
 				P5.openChangeMenu(this);
-			if(this.otrlov){
+			if(this.otrlov)
 				P5.openConChangeMenu(this);
-			}
+			
 		}
 		else if(P5.deleteMode && !P5.connectionMode){
 			// DELETE MODE
-			P5.decisions.splice(P5.decisions.indexOf(this), 1);
+			this.kys(tree);
 			P5.delModeHide();
 		}
 		else if(!P5.deleteMode && P5.connectionMode){

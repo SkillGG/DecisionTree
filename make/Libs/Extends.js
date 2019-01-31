@@ -5,9 +5,23 @@ Array.prototype.setLastItem = function(value) {
 	return (this[this.indexOf(this.getLastItem())] = value);
 };
 Array.prototype.unsetLastItem = function() {
-	return this.splice(this.indexOf(this.getLastItem()), 1)[0];
+	return this.unsetItem(this.indexOf(this.getLastItem()));
 };
+Array.prototype.unsetMatchingItemA = function(match){
+	let i;
+	if(i = this.getFirstMatchingObjectA(match)){
+		return this.unsetItem(this.indexOf(i));
+	}
+}
+Array.prototype.unsetMatchingItemV = function(match){
+	let i;
+	if(i = this.getFirstMatchingObjectV(match)){
+		return this.unsetItem(this.indexOf(i));
+	}
+}
 Array.prototype.unsetItem = function(index){
+	if(index === -1)
+		return null;
 	return this.splice(index, 1)[0];
 }
 Array.prototype.getAllMatchingObjectsA = function(match){
@@ -73,7 +87,7 @@ Array.prototype.pushIfNot = function(el)
 	if(this.indexOf(el) !== -1){
 		return false;
 	}
-	else if(this.getFirstMatchingObjectA(el)){
+	else if(this.getFirstMatchingObjectV(el)){
 		return false;
 	}
 	this.push(el);
@@ -123,6 +137,41 @@ Array.prototype.getFirstMatchingObjectA = function(match){
 		}
 	});
 	return r || null;
+}
+Array.prototype.getAllMatchingObjectsV = function(match){
+	if(!((match === Object(match))&& 	// Check if is an object
+		typeof match !== 'function'))	// exclude functions
+		return null;
+	let r = [];
+	this.forEach((e)=>{
+		let eMatch = [];
+		if(	(e === Object(e))&& 		// Check if is an object
+			typeof e !== 'function'&& 	// exclude functions
+			!Array.isArray(e)){			// exclude arrays
+				let matchAttrs = [];
+				if(Array.isArray(match))
+					return;
+				else 
+					Object.entries(match).forEach((z)=>{matchAttrs.push({n:z[0],v:z[1]})});
+				let fail = false;
+				matchAttrs.forEach((x)=>{
+					if(!(e[x.n]) || (e[x.n] !== x.v)){
+						fail = true;
+						return;
+					}
+				});
+				if(fail)
+					return;
+				else r.push(e);
+		}
+	});
+	return (r||[]).length > 0?(r||null):null;
+}
+Array.prototype.getFirstMatchingObjectV = function(match){
+	return (r = (this.getAllMatchingObjectsV(match) ) )?r[0]?r[0]:null:null;
+}
+Array.prototype.getLastMatchingObjectV = function(match){
+	return (r = (this.getAllMatchingObjectsV(match) ) )?r.getLastItem()?r.getLastItem():null:null;
 }
 Element.prototype.clear = function(){
 	let change = document.createElement(this.tagName);
