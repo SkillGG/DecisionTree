@@ -65,7 +65,9 @@ treeMenu.btn.onclick = (e)=>{
 treeMenu.addBtn.onclick = (e)=>{
 	P5.typing = true;
 	addMenu({}).then((r)=>{
-		let ts = P5.font.textBounds(r.value);
+		let vb = P5.font.textBounds(r.value);
+		let nb = P5.font.textBounds(r.name);
+		let ts = {h: vb.h>nb.h?vb.h:nb.h, w:vb.w>nb.w?vb.w:nb.w};
 		P5.addDecision(
 			r.name.replace(/[ \t]/gi, ""),
 			r.value,
