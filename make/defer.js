@@ -171,6 +171,11 @@ let addMenu = (setup)=>{
 		return null;
 	return new Promise((rs,rj)=>{
 		Decisions.input.addName.value = setup.name || "";
+		Decisions.input.addName.onkeyup =
+		Decisions.input.addValue.onkeyup = (e)=>{
+			if(e.which === 13)
+				Decisions.input.addBtn.onclick();
+		}
 		Decisions.input.addValue.value = setup.value || "";
 		let tempWOC = window.onclick;
 		window.onclick = (e)=>{
@@ -184,11 +189,14 @@ let addMenu = (setup)=>{
 			Modals.items[0].hide();
 			if(!Decisions.input.addName.value)
 				rj("Name not specified!");
+			if(/^[0-9][^\n\r]*$/.test(Decisions.input.addName.value))
+				rj("Name should not start with a number!");
 			rs({name: Decisions.input.addName.value, value: Decisions.input.addValue.value});
 		}
 		Modals.items[0].show();
 		fileMenu.menu.style.display = "none";
 		treeMenu.menu.style.display = "none";
+		Decisions.input.addName.focus();
 
 	});
 }
@@ -214,8 +222,25 @@ let changeMenu = (setup)=>{
 		Modals.items[1].show();
 		fileMenu.menu.style.display = "none";
 		treeMenu.menu.style.display = "none";
+		Decisions.input.cngValue.focus();
+		setInputCursor(Decisions.input.cngValue, Decisions.input.cngValue.value.length);
 	});
 
+}
+
+let setInputCursor = (input, start)=>{
+	if(input.setSelectionRange)
+	{
+		input.focus();
+		input.setSelectionRange(start, start);
+	}
+	else if (input.createTextRange) {
+		var range = input.createTextRange();
+		range.collapse(true);
+		range.moveEnd('character', start);
+		range.moveStart('character', start);
+		range.select();
+	}
 }
 
 let connChangeMenu = (setup)=>{
